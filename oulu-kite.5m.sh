@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Hakee viimeisimmän tuuliennusteetn Vihreäsaaren havaintoasemalta FMI:n julkisen API:n kautta
+# Hakee viimeisimmän tuuliennusteen Vihreäsaaren havaintoasemalta FMI:n julkisen API:n kautta
 #
 # Mikko Rönkkömäki (mikko.ronkkomaki@gmail.com)
 
@@ -9,7 +9,6 @@
 # <bitbar.version>v0.1</bitbar.version>
 # <bitbar.author>Mikko Rönkkömäki</bitbar.author>
 # <bitbar.image>http://i.imgur.com/y1SZwfq.png</bitbar.image>
-# XPATH jolla saa viimeisen elementin, joka mätsää listaan (//wfs:FeatureCollection/wfs:member[BsWfs:BsWfsElement/BsWfs:ParameterName = 'windspeedms'])[last()]/BsWfs:BsWfsElement/BsWfs:ParameterValue/text()
 
 data=$(curl -sL 'http://data.fmi.fi/fmi-apikey/55d44f5f-70e8-4d88-9d5e-ee083dcd0ca3/wfs?request=getFeature&storedquery_id=fmi::observations::weather::simple&fmisid=101794&parameters=windspeedms,winddirection,windGust,temperature')
 lampotila=$(xmllint --format --xpath "//*[local-name()='FeatureCollection']/*[local-name()='member'][last()]/*[local-name()='BsWfsElement']/*[local-name()='ParameterValue']/text()" - <<<"$data")
