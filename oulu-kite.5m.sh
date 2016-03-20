@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Hakee viimeisimmän tuuliennusteen Vihreäsaaren havaintoasemalta FMI:n julkisen API:n kautta
+# Hakee viimeisimmän tuuliennusteen valitulta havaintoasemalta FMI:n julkisen API:n kautta
 #
 # Mikko Rönkkömäki (mikko.ronkkomaki@gmail.com)
 
@@ -10,7 +10,13 @@
 # <bitbar.author>Mikko Rönkkömäki</bitbar.author>
 # <bitbar.image>http://i.imgur.com/y1SZwfq.png</bitbar.image>
 
-data=$(curl -sL 'http://data.fmi.fi/fmi-apikey/55d44f5f-70e8-4d88-9d5e-ee083dcd0ca3/wfs?request=getFeature&storedquery_id=fmi::observations::weather::simple&fmisid=101794&parameters=windspeedms,winddirection,windGust,temperature')
+asematunnus="101794"
+
+if [ "$1" != '' ]; then
+  asematunnus=$1
+fi
+
+data=$(curl -sL 'http://data.fmi.fi/fmi-apikey/55d44f5f-70e8-4d88-9d5e-ee083dcd0ca3/wfs?request=getFeature&storedquery_id=fmi::observations::weather::simple&fmisid='$asematunnus'&parameters=windspeedms,winddirection,windGust,temperature')
 lampotila=$(xmllint --format --xpath "//*[local-name()='FeatureCollection']/*[local-name()='member'][last()]/*[local-name()='BsWfsElement']/*[local-name()='ParameterValue']/text()" - <<<"$data")
 tuulenNopeus=$(xmllint --format --xpath "(//*[local-name()='FeatureCollection']/*[local-name()='member'][*[local-name()='BsWfsElement']/*[local-name()='ParameterName']='windspeedms'])[last()]/*[local-name()='BsWfsElement']/*[local-name()='ParameterValue']/text()" - <<<"$data")
 puuskat=$(xmllint --format --xpath "(//*[local-name()='FeatureCollection']/*[local-name()='member'][*[local-name()='BsWfsElement']/*[local-name()='ParameterName']='windGust'])[last()]/*[local-name()='BsWfsElement']/*[local-name()='ParameterValue']/text()" - <<<"$data")
@@ -80,4 +86,9 @@ fi
 
 echo $sisalto
 echo "---"
-echo "Avaa mittari | href=http://windmeter.laivuri.net/#kite-oulu/"
+echo "Oulu Vihreäsaari | bash=$0 param1=101794 terminal=false"
+echo "Hailuoto Marjaniemi | bash=$0 param1=101784 terminal=false"
+echo "Oulunsalo Pellonpää | bash=$0 param1=101799 terminal=false"
+echo "Raahe Lapaluoto | bash=$0 param1=100540 terminal=false"
+echo "---"
+echo "Avaa mittari| href=http://windmeter.laivuri.net/#kite-oulu/"
