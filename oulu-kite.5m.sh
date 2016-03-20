@@ -63,7 +63,7 @@ sisalto="$tuulenSuunta $tuulenNopeus/$puuskat $lampotila"
 
 
 if (( $(echo "$tuulenNopeus >= 6" |bc -l) )) && (( $(echo "$tuulenNopeus <= 12" |bc -l) )) && (( $(echo "$puuskienErotus < 3.5" |bc -l) )); then
-  sisalto="$sisalto | color=#80ff00"
+  sisalto="✅ $sisalto | color=#80ff00"
 fi
 
 if (( $(echo "$tuulenNopeus > 12" |bc -l) )); then
@@ -71,11 +71,11 @@ if (( $(echo "$tuulenNopeus > 12" |bc -l) )); then
 fi
 
 if (( $(echo "$tuulenNopeus > 6" |bc -l) )) &&  (( $(echo "$puuskienErotus > 3.5" |bc -l) )); then
-  sisalto="⚠️ $sisalto | color=orange"
+  sisalto="⚠️ $sisalto | color=ff8000"
 fi
 
 if (( $(echo "$tuulenNopeus > 15" |bc -l) )); then
-  sisalto="☠ $sisalto | color=#ff1a1a"
+  sisalto="⛔ $sisalto | color=#ff1a1a"
 fi
 
 echo $sisalto
