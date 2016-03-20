@@ -18,38 +18,46 @@ tuulenSuuntaAste=$(xmllint --format --xpath "(//*[local-name()='FeatureCollectio
 tuulenSuunta=""
 
 
+# koilinen
 if (( $(echo "$tuulenSuuntaAste >= 22.5" |bc -l) )) && (( $(echo "$tuulenSuuntaAste <= 67.5" |bc -l) )); then
-  tuulenSuunta="koilinen"
+  tuulenSuunta="↙"
 fi
 
+# itä
 if (( $(echo "$tuulenSuuntaAste >= 67.5" |bc -l) )) && (( $(echo "$tuulenSuuntaAste <= 112.5" |bc -l) )); then
-  tuulenSuunta="itä"
+  tuulenSuunta="←"
 fi
 
+# kaakko
 if (( $(echo "$tuulenSuuntaAste >= 112.5" |bc -l) )) && (( $(echo "$tuulenSuuntaAste <= 157.5" |bc -l) )); then
-  tuulenSuunta="kaakko"
+  tuulenSuunta="↖"
 fi
 
+# etelä
 if (( $(echo "$tuulenSuuntaAste >= 157.5" |bc -l) )) && (( $(echo "$tuulenSuuntaAste <= 202.5" |bc -l) )); then
-  tuulenSuunta="etelä"
+  tuulenSuunta="↑"
 fi
 
+# lounas
 if (( $(echo "$tuulenSuuntaAste >= 202.5" |bc -l) )) && (( $(echo "$tuulenSuuntaAste <= 247.5" |bc -l) )); then
-  tuulenSuunta="lounas"
+  tuulenSuunta="↗"
 fi
 
+# länsi
 if (( $(echo "$tuulenSuuntaAste >= 247.5" |bc -l) )) && (( $(echo "$tuulenSuuntaAste <= 292.5" |bc -l) )); then
-  tuulenSuunta="länsi"
+  tuulenSuunta="→"
 fi
 
+# luode
 if (( $(echo "$tuulenSuuntaAste >= 292.5" |bc -l) )) && (( $(echo "$tuulenSuuntaAste <= 337.5" |bc -l) )); then
-  tuulenSuunta="luode"
+  tuulenSuunta="↘"
 fi
 
+# pohjoinen
 if (( $(echo "$tuulenSuuntaAste >= 337.5" |bc -l) )) || (( $(echo "$tuulenSuuntaAste <= 22.5" |bc -l) )); then
-  tuulenSuunta="pohjoinen"
+  tuulenSuunta="↓"
 fi
 
-echo "$tuulenNopeus / $puuskat ($tuulenSuunta) $lampotila "
+echo "$tuulenNopeus / $puuskat $tuulenSuunta $lampotila "
 echo "---"
 echo "Avaa mittari | href=http://windmeter.laivuri.net/#kite-oulu/"
