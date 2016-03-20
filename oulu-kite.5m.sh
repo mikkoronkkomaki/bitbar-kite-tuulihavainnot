@@ -15,8 +15,9 @@ lampotila=$(xmllint --format --xpath "//*[local-name()='FeatureCollection']/*[lo
 tuulenNopeus=$(xmllint --format --xpath "(//*[local-name()='FeatureCollection']/*[local-name()='member'][*[local-name()='BsWfsElement']/*[local-name()='ParameterName']='windspeedms'])[last()]/*[local-name()='BsWfsElement']/*[local-name()='ParameterValue']/text()" - <<<"$data")
 puuskat=$(xmllint --format --xpath "(//*[local-name()='FeatureCollection']/*[local-name()='member'][*[local-name()='BsWfsElement']/*[local-name()='ParameterName']='windGust'])[last()]/*[local-name()='BsWfsElement']/*[local-name()='ParameterValue']/text()" - <<<"$data")
 tuulenSuuntaAste=$(xmllint --format --xpath "(//*[local-name()='FeatureCollection']/*[local-name()='member'][*[local-name()='BsWfsElement']/*[local-name()='ParameterName']='winddirection'])[last()]/*[local-name()='BsWfsElement']/*[local-name()='ParameterValue']/text()" - <<<"$data")
+puuskienErotus=$(echo "$puuskat - $tuulenNopeus" | bc -l)
 tuulenSuunta=""
-
+sisalto=""
 
 # koilinen
 if (( $(echo "$tuulenSuuntaAste >= 22.5" |bc -l) )) && (( $(echo "$tuulenSuuntaAste <= 67.5" |bc -l) )); then
@@ -58,6 +59,25 @@ if (( $(echo "$tuulenSuuntaAste >= 337.5" |bc -l) )) || (( $(echo "$tuulenSuunta
   tuulenSuunta="↓"
 fi
 
-echo "$tuulenNopeus / $puuskat $tuulenSuunta $lampotila "
+sisalto="$tuulenSuunta $tuulenNopeus/$puuskat $lampotila"
+
+
+if (( $(echo "$tuulenNopeus >= 6" |bc -l) )) && (( $(echo "$tuulenNopeus <= 12" |bc -l) )) && (( $(echo "$puuskienErotus < 3.5" |bc -l) )); then
+  sisalto="$sisalto | color=#80ff00"
+fi
+
+if (( $(echo "$tuulenNopeus > 12" |bc -l) )); then
+  sisalto="⚠️ $sisalto | color=#ff8000"
+fi
+
+if (( $(echo "$tuulenNopeus > 6" |bc -l) )) &&  (( $(echo "$puuskienErotus > 3.5" |bc -l) )); then
+  sisalto="⚠️ $sisalto | color=orange"
+fi
+
+if (( $(echo "$tuulenNopeus > 15" |bc -l) )); then
+  sisalto="☠ $sisalto | color=#ff1a1a"
+fi
+
+echo $sisalto
 echo "---"
 echo "Avaa mittari | href=http://windmeter.laivuri.net/#kite-oulu/"
